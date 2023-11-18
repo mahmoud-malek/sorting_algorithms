@@ -27,28 +27,25 @@ void swap(int *a, int *b)
 
 int partition_hoare(int array[], int low, int high, size_t size)
 {
-	int r = high, l = low;
-	int reverse = 0;
+	int pivot = array[high], l = low - 1, r = high + 1;
 
-	while (1)
+	for (; l < r;)
 	{
-		if (array[l] > array[r])
+		do {
+			l++;
+		} while (array[l] < pivot);
+		do {
+			r--;
+		} while (array[r] > pivot);
+
+		if (l < r)
 		{
-			swap(&array[l], &array[r]);
-			reverse = !reverse;
+			swap(array + l, array + r);
 			print_array(array, size);
 		}
-
-		if (l >= r)
-			return (r);
-
-		if (reverse)
-			r--;
-		else
-			l++;
 	}
 
-	return (r);
+	return (l);
 }
 
 /**
@@ -70,7 +67,7 @@ void quick(int array[], int low, int high, size_t size)
 	{
 		pivot = partition_hoare(array, low, high, size);
 		quick(array, low, pivot - 1, size);
-		quick(array, pivot + 1, high, size);
+		quick(array, pivot, high, size);
 	}
 }
 
