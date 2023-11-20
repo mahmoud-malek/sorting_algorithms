@@ -61,11 +61,11 @@ void mergeSortHelper(int *array, int *temp, int l, int r)
 {
 	if (l < r)
 	{
-		int mid = l + (r - l) / 2;
+		int mid = l + (r - l + 1) / 2;
 
-		mergeSortHelper(array, temp, l, mid);
-		mergeSortHelper(array, temp, mid + 1, r);
-		merge(array, temp, l, r, mid);
+		mergeSortHelper(array, temp, l, mid - 1);
+		mergeSortHelper(array, temp, mid, r);
+		merge(array, temp, l, r, mid - 1);
 	}
 }
 
