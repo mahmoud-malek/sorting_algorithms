@@ -29,44 +29,45 @@ void print_msg(int *array, int l, int r)
  * @r: Right index of the second subarray.
  * @mid: Middle index to divide the subarrays.
  * @array: The array to be merged.
+ * @temp: is a temproary
  */
 
-void merge(int l, int r, int mid, int *array)
+void merge(int *array, int *temp, int l, int r, int mid)
 {
 	int leftSize = mid - l + 1;
 	int rightSize = r - mid;
 
-	int *tmp1 = (int *)malloc(leftSize * sizeof(int));
-	int *tmp2 = (int *)malloc(rightSize * sizeof(int));
-
 	int i, j, k;
 
 	for (i = 0; i < leftSize; i++)
-		tmp1[i] = array[i + l];
-
+		temp[i] = array[l + i];
 	for (i = 0; i < rightSize; i++)
-		tmp2[i] = array[i + mid + 1];
+		temp[i + leftSize] = array[i + mid + 1];
 
 	printf("Merging...\n");
 	printf("[left]: ");
 	for (i = 0; i < leftSize; i++)
-		printf("%d%s", tmp1[i], (i < leftSize - 1) ? ", " : "\n");
+		printf("%d%s", temp[i], (i < leftSize - 1) ? ", " : "\n");
 	printf("[right]: ");
 	for (i = 0; i < rightSize; i++)
-		printf("%d%s", tmp2[i], (i < rightSize - 1) ? ", " : "\n");
+		printf("%d%s", temp[i + leftSize], (i < rightSize - 1) ? ", " : "\n");
 
-	for (i = 0, j = 0, k = l; k <= r; k++)
+	i = 0, j = leftSize, k = l;
+	while (i < leftSize && j < leftSize + rightSize)
 	{
-		/*Check if tmp1 is less than tmp2 or tmp2 is not exist*/
-		if (i < leftSize && (j >= rightSize || tmp1[i] <= tmp2[j]))
-			array[k] = tmp1[i], i++;
-
+		if (temp[i] <= temp[j])
+			array[k++] = temp[i++];
 		else
-			array[k] = tmp2[j], j++;
+			array[k++] = temp[j++];
 	}
+
+	while (i < leftSize)
+		array[k++] = temp[i++];
+
+	while (j < leftSize + rightSize)
+		array[k++] = temp[j++];
+
 	print_msg(array, l, r);
-	free(tmp1);
-	free(tmp2);
 }
 
 /**
@@ -76,20 +77,19 @@ void merge(int l, int r, int mid, int *array)
  * @l: Left index of the subarray to be sorted.
  * @r: Right index of the subarray to be sorted.
  * @array: The array to be sorted.
+ * @temp: is a temproary
  */
 
-void mergeSortHelper(int l, int r, int *array)
+void mergeSortHelper(int *array, int *temp, int l, int r)
 {
-	int mid;
+	if (l < r)
+	{
+		int mid = l + (r - l) / 2;
 
-	if (l >= r)
-		return;
-
-	mid = l + (r - l) / 2;
-
-	mergeSortHelper(l, mid, array);
-	mergeSortHelper(mid + 1, r, array);
-	merge(l, r, mid, array);
+		mergeSortHelper(array, temp, l, mid);
+		mergeSortHelper(array, temp, mid + 1, r);
+		merge(array, temp, l, r, mid);
+	}
 }
 
 /**
@@ -102,9 +102,17 @@ void mergeSortHelper(int l, int r, int *array)
 
 void merge_sort(int *array, size_t size)
 {
+	int *temp = (int *)malloc(size * sizeof(int));
+
+	if (!temp)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		return;
+	}
 
 	if (size < 2 || !array)
 		return;
 
-	mergeSortHelper(0, (int)size - 1, array);
+	mergeSortHelper(array, temp, 0, size - 1);
+	free(temp);
 }
