@@ -12,12 +12,12 @@
  * @temp: is a temproary
  */
 
-void merge(int *array, int *temp, int l, int r, int mid)
+void merge(int *array, int *temp, size_t l, size_t r, size_t mid)
 {
-	int leftSize = mid - l + 1;
-	int rightSize = r - mid;
+	size_t leftSize = mid - l + 1;
+	size_t rightSize = r - mid;
 
-	int i, j, k;
+	size_t i, j, k;
 
 	for (i = 0; i < leftSize; i++)
 		temp[i] = array[l + i];
@@ -57,11 +57,11 @@ void merge(int *array, int *temp, int l, int r, int mid)
  * @temp: is a temproary
  */
 
-void mergeSortHelper(int *array, int *temp, int l, int r)
+void mergeSortHelper(int *array, int *temp, size_t l, size_t r)
 {
 	if (l < r)
 	{
-		int mid = l + (r - l + 1) / 2;
+		size_t mid = l + (r - l + 1) / 2;
 
 		mergeSortHelper(array, temp, l, mid - 1);
 		mergeSortHelper(array, temp, mid, r);
@@ -82,10 +82,7 @@ void merge_sort(int *array, size_t size)
 	int *temp = (int *)malloc(size * sizeof(int));
 
 	if (!temp)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
 		return;
-	}
 
 	if (size < 2 || !array)
 		return;
