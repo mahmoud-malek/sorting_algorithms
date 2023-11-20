@@ -22,7 +22,7 @@ void merge(int *array, int *temp, int l, int r, int mid)
 	for (i = 0; i < leftSize; i++)
 		temp[i] = array[l + i];
 	for (i = 0; i < rightSize; i++)
-		temp[i + leftSize] = array[i + mid + 1];
+		temp[i + leftSize] = array[mid + 1 + i];
 
 	i = 0, j = leftSize, k = l;
 	while (i < leftSize && j < leftSize + rightSize)
