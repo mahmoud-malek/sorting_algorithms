@@ -1,26 +1,6 @@
 #include "sort.h"
 
 /**
- * print_msg - the merged portion of the array.
- *
- * @array: The array containing the merged elements.
- * @l: The starting index of the merged portion.
- * @r: The ending index of the merged portion.
- */
-
-void print_msg(int *array, int l, int r)
-{
-	int i;
-
-	if (!array)
-		return;
-
-	printf("[Done]: ");
-	for (i = l; i <= r; i++)
-		printf("%d%s", array[i], (i < r) ? ", " : "\n");
-}
-
-/**
  * merge - two subarrays of array[].
  * First subarray is array[l..mid]
  * Second subarray is array[mid+1..r]
@@ -44,14 +24,6 @@ void merge(int *array, int *temp, int l, int r, int mid)
 	for (i = 0; i < rightSize; i++)
 		temp[i + leftSize] = array[i + mid + 1];
 
-	printf("Merging...\n");
-	printf("[left]: ");
-	for (i = 0; i < leftSize; i++)
-		printf("%d%s", temp[i], (i < leftSize - 1) ? ", " : "\n");
-	printf("[right]: ");
-	for (i = 0; i < rightSize; i++)
-		printf("%d%s", temp[i + leftSize], (i < rightSize - 1) ? ", " : "\n");
-
 	i = 0, j = leftSize, k = l;
 	while (i < leftSize && j < leftSize + rightSize)
 	{
@@ -67,7 +39,12 @@ void merge(int *array, int *temp, int l, int r, int mid)
 	while (j < leftSize + rightSize)
 		array[k++] = temp[j++];
 
-	print_msg(array, l, r);
+	printf("Merging...\n[left]: ");
+	print_array(temp, leftSize);
+	printf("[right]: ");
+	print_array(temp + leftSize, rightSize);
+	printf("[Done]: ");
+	print_array(array, k);
 }
 
 /**
