@@ -44,7 +44,7 @@ void merge(int *array, int *temp, int l, int r, int mid)
 	printf("[right]: ");
 	print_array(temp + leftSize, rightSize);
 	printf("[Done]: ");
-	print_array(array, k);
+	print_array(array + l, r - l + 1);
 }
 
 /**
